@@ -37,11 +37,11 @@ class Reader(db.Model):
     __tablename__ = "reader" #表名
     id = db.Column(db.Integer,primary_key=True,autoincrement=True) #id 主键自增
     reader_name = db.Column(db.String(50),nullable=False) # 用户名
-    reader_char =db.Column(db.String(10),nullable=True) # 用户名首字符
     reader_pass = db.Column(db.String(50),nullable=False)  # 用户密码
     reader_credit = db.Column(db.Integer,nullable=True) # 用户信誉度
     address = db.Column(db.String(50), nullable=True)  # 地址
     phone = db.Column(db.String(11), nullable=True)  # 电话
+    is_activate =db.Column(db.Integer,nullable=True) #0表示注册未激活    1表示激活账号，已经使用过账号
     '''
         参考
        作者1--N书
