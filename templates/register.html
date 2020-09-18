@@ -63,26 +63,23 @@
       </div>
       <!-- /.navbar-collapse -->
     </nav>
-
+      <!--注册需要的列： 用户名，等级,密码，电话号码-->
     <form class="form-signin" role="form" method="post" action="/register">
          {#设置隐藏的csrf_token,使用了CSRFProtect保护app之后,即可使用csrf_token()方法#}
         <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
-
       <h2 class="form-signin-heading">请登录</h2>
 
-      <select name="user_grade" id="input${1/(\w+)/\u\1/g}" class="form-control" required="required">
+      <select name="reader_grade" id="input${1/(\w+)/\u\1/g}" class="form-control" required="required">
         <option value="1">一级读者</option>
         <option value="2">二级读者</option>
         <option value="3">三级读者</option>
       </select>
-
-      <input type="text" name='user_code' class="form-control" placeholder="编号" required autofocus>
-      <input type="text" name='user_name' class="form-control" placeholder="姓名" required>
-      <input type="password" name='user_password' class="form-control" placeholder="密码" required>
-      <input type="password" name='user_phone' class="form-control" placeholder="电话" required>
-      <input type="password" name='user_addr' class="form-control" placeholder="地址" required>
+      <input type="text" name='reader_name' class="form-control" placeholder="用户名" required>
+      <input type="password" name='reader_pwd' class="form-control" placeholder="密码" required>
+      <input type="text" name='reader_phone' class="form-control" placeholder="电话" required>
+         <p class="bg-warning">说明：1级押金100可借1本，2级押金200可借2本，3级押金300可借3本</p>
       <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-        <button class="btn btn-lg btn-primary btn-block" type="submit">提交</button>
+          <button class="btn btn-lg btn-primary btn-block" type="submit">提交</button>
 
       </div>
 
