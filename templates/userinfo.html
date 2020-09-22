@@ -69,8 +69,6 @@
         <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
       <h2 class="form-signin-heading">个人资料</h2>
       <input type="text" name='id' class="form-control" value="{{ reader.id }}" required disabled>
-        <input type="text" name='grade' class="form-control" value="{{ reader.grade.grand_name }}" required disabled>
-        <input type="text" name='grade' class="form-control" value="{{ reader.grand_id}}" required disabled>
           <select name="reader_grade" id="input${1/(\w+)/\u\1/g}" class="form-control" required="required">
             <option value="1" {% if reader.grand_id==1 %} selected {% endif %}>一级读者</option>
             <option value="2" {% if reader.grand_id==2 %} selected {% endif %}>二级读者</option>

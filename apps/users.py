@@ -43,7 +43,6 @@ def login():
         print(type(role_id))
         if role_id =="1":
             #读者用户名和密码
-            print('用户。。。。。。。。。。')
             reader = Reader.query.filter_by(reader_name=user_name,reader_pass=user_pwd).all()
             print(reader)
             #print(f'名字:{reader.reader_name},电话:{reader.phone}')
@@ -51,15 +50,12 @@ def login():
             if len(reader)==0:
                 return render_template('index.html', msg='用户名或密码错误！')
             else:
-                print(reader[0])
+                # 用户登录成功,用户对象保存到session中,方便其他方法调用！
+                session["user_id"] = reader[0].id
+                session["user_name"] = reader[0].reader_name
                 if reader[0].is_activate == 0:
                     msg = '请修改密码！'
-                else:
-                    # 用户登录成功,用户对象保存到session中,方便其他方法调用！
-                    session["user_id"] = reader[0].id
-                    session["user_name"] = reader[0].reader_name
-                    #print(session.get('user_id'))
-                    #print(session.get('user_name'))
+
                 return render_template('reader.html', msg=reader[0].reader_name)
 
 
