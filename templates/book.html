@@ -34,7 +34,7 @@
 
   <div class="container">
 
-   
+   {{ books }}
    
    <!-- 导航 -->
    <nav class="navbar navbar-default" role="navigation">
@@ -87,24 +87,26 @@
           </tr>
         </thead>
         <tbody>
+            {% for item in books %}
           <tr>
-            <td>1</td>
+            <td>{{ item.id }}</td>
             <td>
-              <img src="images/book1.jpg" class="img-responsive" alt="Image" style="width:60px">
+              <img src="/static/images/{{ item.book_imgsrc }}" class="img-responsive" alt="Image" style="width:60px">
             </td>
-            <td>西游记</td>
-            <td>1</td>
-            <td>100</td>
-            <td>10</td>
-            <td>清华出版社</td>
-            <td>100</td>
-            <td>神话</td>
-            <td>古代文学</td>
+            <td>{{ item.book_name }}</td>
+            <td>{{ item.author }}</td>
+            <td>{{ item.book_quantity }}</td>
+            <td>{{ item.price }}</td>
+            <td>{{ item.bookConcern }}</td>
+            <td>{{ item.bookOutCount }}</td>
+            <td>{{ item.bookInfo }}</td>
+            <td>{{ item.booktype.type_name }}</td>
             <td>
             <a type="button" href='#' class="btn btn-primary ">借阅</a>
             <a type="button" href='#' class="btn btn-primary ">归还</a>
             </td>
           </tr>
+        {% endfor %}
         </tbody>
       </table>
     </div>

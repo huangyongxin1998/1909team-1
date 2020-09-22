@@ -1,6 +1,6 @@
 # 用户模块
 from flask import Blueprint,render_template,request,session
-from .models import  Reader,ReaderGrade # 项目中一定使用一下模型类！ 否则无法迁移！
+from .models import  Reader,ReaderGrade,Book,BookType # 项目中一定使用一下模型类！ 否则无法迁移！
 from  config import  db
 users = Blueprint('users',__name__)
 
@@ -111,4 +111,8 @@ def update_pwd():
 
 
 
-
+@users.route('/booklist', methods=['GET'])
+def book_list():
+    # 图书数量大于1的表示可借
+    books = Book.query.filter(Book.book_quantity > 1).all()
+    return render_template('book.html',books=books)

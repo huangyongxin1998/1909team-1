@@ -63,3 +63,32 @@ class Reader(db.Model):
             "phone": self.phone# 电话
         }
         return user_dict
+
+#图书类别 BookType
+class BookType(db.Model):
+    '''读者等级表'''
+    __tablename__ = "book_type" #表名
+    id = db.Column(db.Integer,primary_key=True,autoincrement=True) #id 主键自增
+    type_name = db.Column(db.String(50),nullable=True) # 级别名字
+    # 读者返回来引用 级别
+    readers =db.relationship('Book', backref='booktype')#指定读者对象，引用级别的别名！
+    def __str__(self):
+        return self.type_name
+
+class Book(db.Model):
+    '''读者等级表'''
+    __tablename__ = "book" #表名
+    id = db.Column(db.Integer,primary_key=True,autoincrement=True) #id 主键自增
+    book_name = db.Column(db.String(50),nullable=False) # 用户名
+    book_quantity = db.Column(db.Integer,nullable=False)  # 书籍数量
+    bookInfo = db.Column(db.String(100),nullable=True) # 书籍说明
+    book_imgsrc = db.Column(db.String(50), nullable=True)  # 书籍封面
+    author = db.Column(db.String(50), nullable=True)  # 作者名字
+    price = db.Column(db.Integer,nullable=True) # 单价
+    bookConcern = db.Column(db.String(50), nullable=True)  # 出版社
+    bookOutCount =db.Column(db.Integer,nullable=True) #出租次数
+    bookChar = db.Column(db.String(10), nullable=True)  # 书籍首字母
+    book_type= db.Column(db.Integer,db.ForeignKey('book_type.id')) # 外键表名.id
+
+    def __str__(self):
+           return self.book_name
