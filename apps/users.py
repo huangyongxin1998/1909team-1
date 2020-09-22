@@ -55,9 +55,7 @@ def login():
                 session["user_name"] = reader[0].reader_name
                 if reader[0].is_activate == 0:
                     msg = '请修改密码！'
-
                 return render_template('reader.html', msg=reader[0].reader_name)
-
 
         elif role_id=="2":
             #图书管理员
@@ -74,8 +72,43 @@ def user_info():
     print(f'用户id:{id}')
     reader = Reader.query.filter_by(id=id).all()
     if len(reader)>0:
-        return render_template('userinfo.html',reader=reader[0])
+        return render_template('update_pwd.html', reader=reader[0])
     else:
         return render_template('reader.html',msg='查询无结果！')
+
+@users.route('/updatepwd', methods=['GET','POST'])
+def update_pwd():
+    if request.method=='GET':
+        return render_template('update_pwd.html')
+    else:
+        # 1.获取数据，2，完整性判断 3.修改
+        old_pwd = request.form.get('old_pwd')
+        pwd1 = request.form.get('pwd1')
+        pwd2 = request.form.get('pwd2')
+
+        id = session.get('user_id')
+        reader = Reader.query.filter_by(id=id).first()
+
+        # 判断
+        if  not  all([old_pwd,pwd1,pwd2]): # 判断列表中的所有变量是否都有值！ 都有值返回true
+            msg = '字段不能为空'
+            return  render_template('update_pwd.html',msg=msg)
+        else:
+            # 判断用户名是否正确，两次密码是否相等
+            if reader.reader_pass !=old_pwd:
+                msg = '密码输入错误！'
+                return render_template('update_pwd.html', msg=msg,old_pwd=old_pwd,pwd1=pwd1,pwd2=pwd2)
+            if pwd1 != pwd2:
+                msg = '密码不一致！'
+                return render_template('update_pwd.html', msg=msg,old_pwd=old_pwd,pwd1=pwd1,pwd2=pwd2)
+            try:
+                reader.reader_pass = pwd2
+                db.session.commit()
+                return render_template('reader.html', msg='修改成功')
+            except Exception as e:
+                msg = '修改失败'
+                return render_template('reader.html', msg='修改失败')
+
+
 
 

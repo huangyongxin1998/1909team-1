@@ -11,7 +11,7 @@
   <meta name="author" content="">
   <link rel="shortcut icon" href="../../docs-assets/ico/favicon.png">
 
-  <title>读者页面</title>
+  <title>密码修改</title>
 
   <!-- Bootstrap core CSS -->
   <link rel="stylesheet" href="http://cdn.bootcss.com/twitter-bootstrap/3.0.3/css/bootstrap.min.css">
@@ -33,7 +33,7 @@
 <body>
 
   <div class="container">
-    <p class="bg-danger">{{ msg }}</p>
+
     <nav class="navbar navbar-default" role="navigation">
       <!-- Brand and toggle get grouped for better mobile display -->
       <div class="navbar-header">
@@ -50,42 +50,33 @@
       <div class="collapse navbar-collapse navbar-ex1-collapse">
         <ul class="nav navbar-nav">
           <li class="active">
-            <a href="#">读者页面</a>
+            <a href="index.html">登录</a>
           </li>
         </ul>
         <ul class="nav navbar-nav navbar-right">
           <li>
-            <a class="btn btn-link" href="register.html" role="button">注册</a>
+            <a class="btn btn-link" href="reader_reg.html" role="button">注册</a>
           </li>
-
 
         </ul>
       </div>
       <!-- /.navbar-collapse -->
     </nav>
 
+      {{ msg }}
+      <!--注册需要的列： 用户名，等级,密码，电话号码-->
+    <form class="form-signin" role="form" method="post" action="/updatepwd">
+         {#设置隐藏的csrf_token,使用了CSRFProtect保护app之后,即可使用csrf_token()方法#}
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+      <h2 class="form-signin-heading">修改密码</h2>
 
-    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-
-      <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
-
-        <a href="book.html" class="btn btn-default btn-block btn-lg" role="button">查询所借图书</a>
-        <a href="book.html" class="btn btn-default btn-block btn-lg" role="button">查询可借图书</a>
-      </div>
-
-      <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
-        <a href="/userinfo" class="btn btn-default btn-block btn-lg" role="button">个人信息查询</a>
-        <a href="/updatepwd" class="btn btn-default btn-block btn-lg" role="button">密码修改</a>
-      </div>
-
-    </div>
-
-    <!-- 列表 -->
-
-
-
-
-
+      <input type="text" name='old_pwd' class="form-control" placeholder="请输入原生密码" value="{{ old_pwd }}" required>
+      <input type="text" name='pwd1' class="form-control" placeholder="请输入新密码"   value="{{ pwd1 }}" required>
+    <input type="text" name='pwd2' class="form-control" placeholder="请再次输入新密码"   value="{{ pwd2 }}" required>
+        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+          <button class="btn btn-lg btn-primary btn-block" type="submit">提交</button>
+        </div>
+    </form>
 
   </div>
   <!-- /container -->
