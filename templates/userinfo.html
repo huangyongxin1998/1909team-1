@@ -9,7 +9,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="description" content="">
   <meta name="author" content="">
-  <title>登录</title>
+  <link rel="shortcut icon" href="../../docs-assets/ico/favicon.png">
+
+  <title>用户资料展示</title>
 
   <!-- Bootstrap core CSS -->
   <link rel="stylesheet" href="http://cdn.bootcss.com/twitter-bootstrap/3.0.3/css/bootstrap.min.css">
@@ -32,11 +34,6 @@
 
   <div class="container">
 
-    
-   
-    
-    <!-- ********** -->
-
     <nav class="navbar navbar-default" role="navigation">
       <!-- Brand and toggle get grouped for better mobile display -->
       <div class="navbar-header">
@@ -46,25 +43,19 @@
           <span class="icon-bar"></span>
           <span class="icon-bar"></span>
         </button>
-        <a class="navbar-brand" href="index.html">BOOK</a>
+        <a class="navbar-brand" href="index.html">图书</a>
       </div>
-      
+
       <!-- Collect the nav links, forms, and other content for toggling -->
       <div class="collapse navbar-collapse navbar-ex1-collapse">
         <ul class="nav navbar-nav">
           <li class="active">
             <a href="index.html">登录</a>
           </li>
-          <li>
-            <a href="bookManager.html">书籍管理员</a>
-          </li>
-          <li>
-            <a href="systemManager.html">系统管理员</a>
-          </li>
         </ul>
         <ul class="nav navbar-nav navbar-right">
           <li>
-            <a class="btn btn-link" href="/register" role="button">注册</a>
+            <a class="btn btn-link" href="reader_reg.html" role="button">注册</a>
           </li>
 
 
@@ -72,26 +63,22 @@
       </div>
       <!-- /.navbar-collapse -->
     </nav>
-
-      {{ msg }}
-
-    <form class="form-signin" role="form" action="/login" method="post">
-      <h2 class="form-signin-heading">请登录</h2>
-        <!--添加csrf防护-->
+      <!--注册需要的列： 用户名，等级,密码，电话号码-->
+    <form class="form-signin" role="form" method="post" action="/register">
+         {#设置隐藏的csrf_token,使用了CSRFProtect保护app之后,即可使用csrf_token()方法#}
         <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
-         <select name="role_id" id="input${1/(\w+)/\u\1/g}" class="form-control" required="required">
-            <option value="1">读者</option>
-            <option value="2">图书管理员</option>
-            <option value="3">系统管理员</option>
-        </select>
-      <input type="text" name="user_name" class="form-control" placeholder="用户名" required autofocus>
-      <input type="password" name="user_pwd" class="form-control" placeholder="密码" required>
-      <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-        <button class="btn btn-lg btn-primary btn-block" type="submit">登录</button>
-
-      </div>
-
-
+      <h2 class="form-signin-heading">个人资料</h2>
+      <input type="text" name='id' class="form-control" value="{{ reader.id }}" required disabled>
+        <input type="text" name='grade' class="form-control" value="{{ reader.grade.grand_name }}" required disabled>
+        <input type="text" name='grade' class="form-control" value="{{ reader.grand_id}}" required disabled>
+          <select name="reader_grade" id="input${1/(\w+)/\u\1/g}" class="form-control" required="required">
+            <option value="1" {% if reader.grand_id==1 %} selected {% endif %}>一级读者</option>
+            <option value="2" {% if reader.grand_id==2 %} selected {% endif %}>二级读者</option>
+            <option value="3" {% if reader.grand_id==3 %} selected {% endif %}>三级读者</option>
+          </select>
+      <input type="text" name='reader_name' class="form-control" placeholder="用户名" value="{{ reader.reader_name }}" required>
+      <input type="text" name='reader_pass' class="form-control" placeholder="密码" value="{{ reader.reader_pass }}" required>
+      <input type="text" name='phone' class="form-control" placeholder="电话" value="{{ reader.phone }}" required>
     </form>
 
   </div>
