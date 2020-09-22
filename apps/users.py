@@ -116,3 +116,12 @@ def book_list():
     # 图书数量大于1的表示可借
     books = Book.query.filter(Book.book_quantity > 1).all()
     return render_template('book.html',books=books)
+
+
+
+
+@users.route('/logout', methods=['GET'])
+def logout():
+    # 1.清空session中数据，跳转
+    session.clear()
+    return render_template('index.html')
