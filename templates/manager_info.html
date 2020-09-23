@@ -50,7 +50,7 @@
       <div class="collapse navbar-collapse navbar-ex1-collapse">
         <ul class="nav navbar-nav">
           <li class="active">
-            <a href="index.html">登录</a>
+            <a href="/book">图书管理</a>
           </li>
         </ul>
         <ul class="nav navbar-nav navbar-right">
@@ -64,19 +64,18 @@
       <!-- /.navbar-collapse -->
     </nav>
       <!--注册需要的列： 用户名，等级,密码，电话号码-->
-    <form class="form-signin" role="form" method="post" action="/managerinfo">
+    <form class="form-signin" role="form" method="post" action="/book/managerinfo/2">
          {#设置隐藏的csrf_token,使用了CSRFProtect保护app之后,即可使用csrf_token()方法#}
         <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
       <h2 class="form-signin-heading">管理员个人资料</h2>
-      <input type="text" name='id' class="form-control" value="1" required disabled>
-          <select name="reader_grade" id="input${1/(\w+)/\u\1/g}" class="form-control" required="required">
-            <option value="1" >一级读者</option>
-            <option value="2">二级读者</option>
-            <option value="3">三级读者</option>
-          </select>
-      <input type="text" name='reader_name' class="form-control" placeholder="用户名" value="" required>
-      <input type="text" name='reader_pass' class="form-control" placeholder="密码" value="" required>
-      <input type="text" name='phone' class="form-control" placeholder="电话" value="" required>
+       <input type="hidden" name='id' class="form-control" value="{{ manager.id }}">
+        <input type="text" name='name' class="form-control" placeholder="用户名" value="{{ manager.manage_name }}" required>
+        <input type="text" name='pwd' class="form-control" placeholder="密码" value="{{ manager.manage_pass }}" required>
+        <input type="text" name='address' class="form-control" placeholder="地址" value="{{ manager.address }}" required>
+        <input type="text" name='phone' class="form-control" placeholder="电话" value="{{ manager.phone }}" required>
+        {% if num ==2 %}<input type="submit"  class="form-control btn-primary" value="提交" >{% endif %}
+
+
     </form>
 
   </div>
