@@ -11,14 +11,14 @@
   <meta name="author" content="">
   <link rel="shortcut icon" href="../../docs-assets/ico/favicon.png">
 
-  <title>读者页面</title>
+  <title>用户资料展示</title>
 
   <!-- Bootstrap core CSS -->
   <link rel="stylesheet" href="http://cdn.bootcss.com/twitter-bootstrap/3.0.3/css/bootstrap.min.css">
 
 
   <!-- Custom styles for this template -->
-  <link href="css/signin.css" rel="stylesheet">
+  <link href="/static/css/signin.css" rel="stylesheet">
 
   <!-- Just for debugging purposes. Don't actually copy this line! -->
   <!--[if lt IE 9]><script src="../../docs-assets/js/ie8-responsive-file-warning.js"></script><![endif]-->
@@ -33,6 +33,7 @@
 <body>
 
   <div class="container">
+
     <nav class="navbar navbar-default" role="navigation">
       <!-- Brand and toggle get grouped for better mobile display -->
       <div class="navbar-header">
@@ -42,23 +43,19 @@
           <span class="icon-bar"></span>
           <span class="icon-bar"></span>
         </button>
-        <a class="navbar-brand" href="index.html">BOOK</a>
+        <a class="navbar-brand" href="index.html">图书</a>
       </div>
 
       <!-- Collect the nav links, forms, and other content for toggling -->
       <div class="collapse navbar-collapse navbar-ex1-collapse">
         <ul class="nav navbar-nav">
           <li class="active">
-            <a href="index.html">书籍管理员</a>
+            <a href="index.html">登录</a>
           </li>
-
         </ul>
         <ul class="nav navbar-nav navbar-right">
-           <li>
-            <a class="btn btn-link" href="#" role="button">欢迎{{ msg }}</a>
-          </li>
           <li>
-            <a class="btn btn-link" href="register.html" role="button">登陆</a>
+            <a class="btn btn-link" href="reader_reg.html" role="button">注册</a>
           </li>
 
 
@@ -66,42 +63,21 @@
       </div>
       <!-- /.navbar-collapse -->
     </nav>
-
-
-    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-
-      <div class="panel panel-primary">
-        <div class="panel-heading">
-          <h3 class="panel-title">功能项</h3>
-        </div>
-        <div class="panel-body">
-          <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
-            <a href="book.html" class="btn btn-default btn-block btn-lg" role="button">借书</a>
-            <a href="book.html" class="btn btn-default btn-block btn-lg" role="button">还书</a>
-          </div>
-
-          <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
-            <a href="book.html" class="btn btn-default btn-block btn-lg" role="button">查询读者信息</a>
-            <a href="book.html" class="btn btn-default btn-block btn-lg" role="button">查询书籍信息</a>
-          </div>
-
-          <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
-            <a href="/book/managerinfo" class="btn btn-default btn-block btn-lg" role="button">个人信息查询</a>
-            <a href="book.html" class="btn btn-default btn-block btn-lg" role="button">密码修改</a>
-          </div>
-        </div>
-      </div>
-
-
-
-    </div>
-
-    <!-- 列表 -->
-
-
-
-
-
+      <!--注册需要的列： 用户名，等级,密码，电话号码-->
+    <form class="form-signin" role="form" method="post" action="/managerinfo">
+         {#设置隐藏的csrf_token,使用了CSRFProtect保护app之后,即可使用csrf_token()方法#}
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+      <h2 class="form-signin-heading">管理员个人资料</h2>
+      <input type="text" name='id' class="form-control" value="1" required disabled>
+          <select name="reader_grade" id="input${1/(\w+)/\u\1/g}" class="form-control" required="required">
+            <option value="1" >一级读者</option>
+            <option value="2">二级读者</option>
+            <option value="3">三级读者</option>
+          </select>
+      <input type="text" name='reader_name' class="form-control" placeholder="用户名" value="" required>
+      <input type="text" name='reader_pass' class="form-control" placeholder="密码" value="" required>
+      <input type="text" name='phone' class="form-control" placeholder="电话" value="" required>
+    </form>
 
   </div>
   <!-- /container -->

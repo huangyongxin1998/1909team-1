@@ -1,6 +1,6 @@
 # 用户模块
 from flask import Blueprint,render_template,request,session
-from .models import  Reader,ReaderGrade,Book,BookType # 项目中一定使用一下模型类！ 否则无法迁移！
+from .models import  Reader,ReaderGrade,Book,BookType,BookManager # 项目中一定使用一下模型类！ 否则无法迁移！
 from  config import  db
 users = Blueprint('users',__name__)
 
@@ -38,7 +38,6 @@ def login():
         user_name = request.form.get('user_name')
         user_pwd = request.form.get('user_pwd')
         print(f'roleid:{role_id},name:{user_name},pwd:{user_pwd}')
-
         # 2.判断角色
         print(type(role_id))
         if role_id =="1":
@@ -56,13 +55,21 @@ def login():
                 if reader[0].is_activate == 0:
                     msg = '请修改密码！'
                 return render_template('reader.html', msg=reader[0].reader_name)
-
-        elif role_id=="2":
-            #图书管理员
-            return render_template('bookManager.html')
         else:
-            # 系统管理员
-            return render_template('systemManager.html')
+            # 系统管理员,图书管理员
+            print(f'管理员名:{user_name},密码:{user_pwd}')
+            manager = BookManager.query.filter_by(manage_name=user_name, manage_pass=user_pwd).all()
+            if len(manager) == 0:
+                return render_template('index.html', msg='管理员名或密码错误！')
+            else:
+                session["user_id"] = manager[0].id
+                session["user_name"] = manager[0].manage_name
+                if role_id =="2":
+                    return render_template('bookManager.html', msg=manager[0].manage_name)
+                else:
+                    return render_template('systemManager.html', msg=manager[0].manage_name)
+
+
 
 
 @users.route('/userinfo', methods=['GET'])
