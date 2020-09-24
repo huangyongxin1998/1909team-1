@@ -35,10 +35,14 @@ def manager_info(num):
         db.session.commit()
         return render_template('bookManager.html',info='修改成功')
 
-@book.route('/readerall',methods=['GET','POST'])
+@book.route('/readerall',methods=['GET'])
 def reader_all():
     readers = Reader.query.all()
     return render_template('reader_list.html',readers=readers)
 
+@book.route('/bookall',methods=['GET'])
+def book_all():
+    books = Book.query.all()
+    return render_template('book.html',books= books)
 
 
