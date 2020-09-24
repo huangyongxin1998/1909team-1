@@ -97,6 +97,23 @@
         {% endfor %}
         </tbody>
       </table>
+
+        <ul class="pagination pagination-lg">
+            {% if paginate.has_prev %}<li><a href="/book/readerall?page={{paginate.prev_num  }}">&laquo;</a></li>{% endif %}
+            {% for i in paginate.iter_pages() %}
+                 {% if paginate.page == i %}
+                     <li  class="active"><a href="/book/readerall?page={{ i }}">{{ i }}</a></li>
+                 {% else %}
+                     <li ><a href="/book/readerall?page={{ i }}">{{ i }}</a></li>
+                {% endif %}
+
+            {% endfor %}
+
+
+            {% if paginate.has_next %}<li><a href="/book/readerall?page={{paginate.next_num  }}">&raquo;</a></li>{% endif %}
+        </ul>
+        <h3>当前第{{ paginate.page }}页</h3>
+        <h3>共{{ paginate.pages }}页</h3>
     </div>
     <!-- 返回读者功能页 -->
     <a class="btn btn-primary btn-block btn-lg" href="/book" role="button">返回</a>

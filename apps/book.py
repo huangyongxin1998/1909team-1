@@ -37,8 +37,18 @@ def manager_info(num):
 
 @book.route('/readerall',methods=['GET'])
 def reader_all():
-    readers = Reader.query.all()
-    return render_template('reader_list.html',readers=readers)
+    paginate = Reader.query.paginate(1, 2)  # 默认显示第1页
+
+    # 获取页数
+    page = int(request.args.get('page',1))
+    if page <= 0:
+        page = 1
+    if page >= paginate.pages:  # 共3页, 输入30-->显示最大页3
+        page = paginate.pages #最大页数
+
+    paginate = Reader.query.paginate(page, 2)# 重新查询
+    readers = paginate.items  # 当前页数据(默认是第1页数据)
+    return render_template('reader_list.html',readers=readers,paginate=paginate)
 
 @book.route('/bookall',methods=['GET'])
 def book_all():
