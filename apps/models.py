@@ -123,7 +123,7 @@ class BorrowBook(db.Model):
 
     borrow_date = db.Column(db.DateTime, nullable=False)  # 借书时间
     restore_date = db.Column(db.DateTime, nullable=True)  # 还书时间
-    book_state = db.Column(db.String(50), nullable=True)  # 书籍状况
+    book_state = db.Column(db.String(50), nullable=True)  # 书籍状况(良好,损坏)
 
     book_id = db.Column(db.Integer, db.ForeignKey('book.id'))  # 外键表名.id
     reader_id = db.Column(db.Integer, db.ForeignKey('reader.id'))  # 读者表名.id

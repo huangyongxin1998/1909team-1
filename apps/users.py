@@ -1,6 +1,6 @@
 # 用户模块
 from flask import Blueprint,render_template,request,session
-from .models import  Reader,ReaderGrade,Book,BookType,BookManager # 项目中一定使用一下模型类！ 否则无法迁移！
+from .models import  Reader,ReaderGrade,Book,BookType,BookManager,BorrowBook # 项目中一定使用一下模型类！ 否则无法迁移！
 from  config import  db
 users = Blueprint('users',__name__)
 
@@ -127,8 +127,35 @@ def book_list():
 
 
 
+
+
 @users.route('/logout', methods=['GET'])
 def logout():
     # 1.清空session中数据，跳转
     session.clear()
     return render_template('index.html')
+
+
+@users.route('/borrow', methods=['GET'])
+def borrow():
+    '''
+    1.借阅之前判断
+       判断已借图书数量 (如何查看借了基本书?)
+       判断已借图书价格
+    '''
+    # 1. 查当前用户所借图书的记录
+    user_id= session.get('user_id')# session中当前用户的id
+    print(user_id)
+    # xiaoA 未归还书籍
+    mybooks =BorrowBook.query.filter(BorrowBook.reader_id==user_id,BorrowBook.restore_date == None).all()
+    print(f'用户借了{len(mybooks)}本书')
+
+    user = Reader.query.get(user_id)
+    print(f'用户{user_id}最多能借{user.grade.quan_tity}本书,押金:{user.grade.max_maney}')
+
+    if len(mybooks)>user.grade.quan_tity:
+        return '不能再借了!'
+    else:
+        # 1. 借书表加+1  书籍表数量 -1 ,生成一个借书编码
+        return '可以借'
+    return '借书流程'
