@@ -1,7 +1,8 @@
 # 用户模块
-from flask import Blueprint,render_template,request,session
+from flask import Blueprint,render_template,request,session,redirect,url_for
 from .models import  Reader,ReaderGrade,Book,BookType,BookManager,BorrowBook # 项目中一定使用一下模型类！ 否则无法迁移！
 from  config import  db
+from datetime import  datetime
 users = Blueprint('users',__name__)
 
 @users.route('/')
@@ -136,9 +137,11 @@ def logout():
     return render_template('index.html')
 
 
-@users.route('/borrow', methods=['GET'])
-def borrow():
+
+@users.route('/borrow/<int:id>/<int:price>', methods=['GET'])
+def borrow(id,price):
     '''
+    id 表示要借书的编号!  price表示书的价格
     1.借阅之前判断
        判断已借图书数量 (如何查看借了基本书?)
        判断已借图书价格
@@ -153,9 +156,39 @@ def borrow():
     user = Reader.query.get(user_id)
     print(f'用户{user_id}最多能借{user.grade.quan_tity}本书,押金:{user.grade.max_maney}')
 
-    if len(mybooks)>user.grade.quan_tity:
-        return '不能再借了!'
+    # 判断价格(把已经借阅的书价格和刚才借的价格相加<=押金数量)
+    sum = 0
+    for item in mybooks:
+        sum += item.book.price   #通过外键获取书籍价格
+    print(f'已经借的书总价:{sum}')
+
+    # 当前要借的书价格
+    print(f'要借书的id{id},该书的价格{price}')
+    sum = sum + price
+    if len(mybooks)>=user.grade.quan_tity:
+        msg = f'您最多能借{user.grade.quan_tity}本书'
     else:
-        # 1. 借书表加+1  书籍表数量 -1 ,生成一个借书编码
-        return '可以借'
-    return '借书流程'
+        # 判断价格是否大于押金
+        if sum > user.grade.max_maney:
+            msg = f'您借书的总价格:{sum}大于押金:{user.grade.max_maney}!'
+        else:
+            # 1. 借书表加+1  书籍表数量 -1 ,生成一个借书编码
+            try:
+                borrow_book = BorrowBook(borrow_date=datetime.now(),book_state='良好',book_id=id,reader_id=user_id)
+                db.session.add(borrow_book)
+                # 数量-1
+                book =  Book.query.get(id)
+                book.book_quantity= book.book_quantity -1
+                book.bookOutCount = book.bookOutCount +1
+                db.session.commit()
+
+                msg = '借阅成功'
+                # 借书码自己随机生成!
+                msg = msg + '您的借书码:123456,请凭借借书码,和管理员领书!'
+            except Exception as e:
+                msg = '借阅失败'
+
+
+    # msg 参数,重定向如法传输!!
+    session["msg"] = msg
+    return redirect('/booklist')

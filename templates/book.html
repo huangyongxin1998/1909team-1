@@ -102,7 +102,7 @@
             <td>{{ item.bookInfo }}</td>
             <td>{{ item.booktype.type_name }}</td>
             <td>
-            <a type="button" href='/borrow' class="btn btn-primary ">借阅</a>
+            <a type="button" href='/borrow/{{ item.id }}/{{ item.price }}' class="btn btn-primary ">借阅</a>
             <a type="button" href='#' class="btn btn-primary ">归还</a>
             </td>
           </tr>
@@ -110,6 +110,8 @@
         </tbody>
       </table>
     </div>
+
+    <h1>{{ session.get('msg') }}</h1>
     <!-- 返回读者功能页 -->
     <a class="btn btn-primary btn-block btn-lg" href="/book" role="button">返回</a>
 
