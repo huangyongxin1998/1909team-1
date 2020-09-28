@@ -70,7 +70,7 @@
 
       {{ books }}
      <div class="table-responsive">
-     <form action="/book/borrow_queren/{{ reader_id }}" method="post">
+     <form action="/book/borrow_queren" method="post">
              <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
       <table class="table table-hover">
         <thead>
