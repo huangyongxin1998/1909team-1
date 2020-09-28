@@ -1,6 +1,6 @@
 # 书籍管理模块
 from flask import Blueprint,render_template,request,session
-from .models import  Reader,ReaderGrade,Book,BookType,BookManager # 项目中一定使用一下模型类！ 否则无法迁移！
+from .models import  Reader,ReaderGrade,Book,BookType,BookManager,BorrowBook # 项目中一定使用一下模型类！ 否则无法迁移！
 from  config import  db
 book = Blueprint('book',__name__)
 
@@ -55,4 +55,15 @@ def book_all():
     books = Book.query.all()
     return render_template('book.html',books= books)
 
-
+@book.route('/borrow_search',methods=['GET','POST'])
+def borrow_search():
+    if request.method=='GET':
+        return render_template('book_borrow_search.html')
+    else:
+        # 1. 获取读者名
+        reader_name = request.form.get('reader_name')
+        # 2. 查询当前读者所借的书籍
+        #mybooks = BorrowBook.query.filter(BorrowBook.reader.reader_name == reader_name,BorrowBook.restore_date == None).all()
+        reader = Reader.query.filter_by(reader_name=reader_name).first()
+        mybooks = BorrowBook.query.filter(BorrowBook.reader_id == reader.id, BorrowBook.restore_date == None).all()
+        return render_template('book_borrow_search.html',books=mybooks,reader_name=reader_name)
