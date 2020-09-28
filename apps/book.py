@@ -66,4 +66,18 @@ def borrow_search():
         #mybooks = BorrowBook.query.filter(BorrowBook.reader.reader_name == reader_name,BorrowBook.restore_date == None).all()
         reader = Reader.query.filter_by(reader_name=reader_name).first()
         mybooks = BorrowBook.query.filter(BorrowBook.reader_id == reader.id, BorrowBook.restore_date == None).all()
-        return render_template('book_borrow_search.html',books=mybooks,reader_name=reader_name)
+        return render_template('book_borrow_search.html',books=mybooks,reader_name=reader_name,reader_id=reader.id)
+
+@book.route('/borrow_queren/<int:reader_id>',methods=['POST'])
+def borrow_queren(id):
+    allid= request.form.getlist('ck')
+    print(f'读者id:{id},所选书:{allid}')
+    manager_id = session.get('user_id')
+    # 查书
+    for id in allid:
+        # 查询这本书
+        book = BorrowBook.query.filter(BorrowBook.reader_id == id,BorrowBook.book_id==id, BorrowBook.restore_date == None).all()
+        book.author_id = manager_id #填写管理员id
+        db.session.commit() #修改
+
+    return render_template('bookManager.html')

@@ -18,7 +18,7 @@
 
 
   <!-- Custom styles for this template -->
-  <link href="css/signin.css" rel="stylesheet">
+  <link href="/static/css/signin.css" rel="stylesheet">
 
   <!-- Just for debugging purposes. Don't actually copy this line! -->
   <!--[if lt IE 9]><script src="../../docs-assets/js/ie8-responsive-file-warning.js"></script><![endif]-->
@@ -70,11 +70,13 @@
 
       {{ books }}
      <div class="table-responsive">
+     <form action="/book/borrow_queren/{{ reader_id }}" method="post">
+             <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
       <table class="table table-hover">
         <thead>
           <tr>
             <th>
-                 <input type="checkbox" name="qx">全选
+                 <input type="checkbox" name="qx"  id="ck01">全选
             </th>
             <th>封面</th>
             <th>书名</th>
@@ -84,10 +86,12 @@
             <th>还书时间时间</th>
           </tr>
         </thead>
+
         <tbody>
+
             {% for item in books %}
           <tr>
-            <td><input type="checkbox" name="qx" value="{{ item.id }}"></td>
+            <td><input type="checkbox" name="ck" value="{{ item.id }}"></td>
             <td>
               <img src="/static/images/{{ item.book.book_imgsrc }}" class="img-responsive" alt="Image" style="width:60px">
             </td>
@@ -98,12 +102,17 @@
             <td>{{ item.restore_date or  "无" }}</td>
           </tr>
         {% endfor %}
+
         </tbody>
+
+
       </table>
+        <input type="submit" class="btn btn-primary btn-block btn-lg"href="/book"  value="确定借出"/>
+     </form>
     </div>
 
     <!-- 返回读者功能页 -->
-    <a class="btn btn-primary btn-block btn-lg" href="/book" role="button">确定借出</a>
+
 
 
 
@@ -118,6 +127,14 @@
   <script src="http://cdn.bootcss.com/jquery/1.10.2/jquery.min.js"></script>
   <!-- Include all compiled plugins (below), or include individual files as needed -->
   <script src="http://cdn.bootcss.com/twitter-bootstrap/3.0.3/js/bootstrap.min.js"></script>
+
+ <script type="text/javascript">
+     $(function(){
+         $('#ck01').click(function(){
+             $('input:checkbox').prop('checked',true);
+         })
+     })
+ </script>
 </body>
 
 </html>
