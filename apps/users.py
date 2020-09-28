@@ -125,10 +125,9 @@ def book_list():
     books = Book.query.filter(Book.book_quantity > 1).all()
     return render_template('book.html',books=books)
 
-
-
-
-
+@users.route('/toreader', methods=['GET'])
+def to_reader():
+    return render_template('reader.html')
 
 @users.route('/logout', methods=['GET'])
 def logout():
@@ -192,3 +191,17 @@ def borrow(id,price):
     # msg 参数,重定向如法传输!!
     session["msg"] = msg
     return redirect('/booklist')
+
+
+
+
+@users.route('/borrowlist', methods=['GET'])
+def to_borrow_list():
+    #1. 当前用户id
+    id = session.get('user_id')
+    # 2.查询 未归还书籍
+    mybooks = BorrowBook.query.filter(BorrowBook.reader_id ==id, BorrowBook.restore_date == None).all()
+    print(mybooks)#[<BorrowBook 16>, <BorrowBook 17>, <BorrowBook 18>, <BorrowBook 19>]
+    return render_template('reader_borrowbook.html',books=mybooks)
+
+

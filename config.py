@@ -23,12 +23,9 @@ def create_app():
     # 初始化数据库配置
     db.init_app(app)
 
-    from apps.xufeiyu import xufeiyu
-    from apps.zhouzy import zhouzy
+
     from apps.users import users
     from apps.book import book
-    app.register_blueprint(xufeiyu, url_prefix="/xfy")
-    app.register_blueprint(zhouzy, url_prefix="/zzy")
     app.register_blueprint(users, url_prefix="/") #用户蓝图/模块
     app.register_blueprint(book, url_prefix="/book")# 书籍模块
     return app
